@@ -1,43 +1,64 @@
-# Set Stock
-This API allows a third-party to set the stock for a particular product.  There are two end-points for this, one for a single item and one for batch operations, both follow a similar format and expect a POST parameter.
+# Set Stock Overview
 
-As well as the `api_key` it also expects either an `item` array (for single) or `items` (for batch) each of which need:
+This API allows a third-party to set the stock for a particular product. There are two end-points for this, one to set stock for a single item and one for batch stock changes on multiple items. 
+
+Both endpoints follow a similar format to each other and expect a JSON array in a POST request.
+
+Your `api_key` is required for these endpoints to work successfully so make sure you have entered it in corectly when building your JSON array.
+
+When Posting to the `Single Item Stock Update` endpoint the details of the item you are updating is contained within an array called `item` and for the `Batch Items Stock Update` endpoint you will have multiple items in an array called `items`.
+
+An item requires the following fields:
 
 * Either product SKU or ID (`sku` or `id`)
 * Stock location ID (`location_id`)
 * Stock level to set to (`level`)
 
-## URLs
-* Single: `DOMAIN/admin/stock/api/set_stock.json`
-* Batch: `DOMAIN/admin/stock/api/set_stock_batch.json`
+# Endpoint Example Requests
 
-## Example Single Item Update
-Updating a single items stock would expect the POST to be something like (note array key is `item`):
+## Example Single Item Stock Update
 
-```php
-'api_key'	=> API_KEY_FOR_USER,
-'item'		=> array(
-	'sku'			=> 123456,
-	'location_id'		=> 2,
-	'level'			=> 5
-)
+URL: `DOMAIN/admin/stock/api/set_stock.json`
+Content-Type: `application/json`
+Method: `POST`
+
+Example:
+
+```json
+{ 
+	"api_key" : "API_KEY_FOR_USER",
+	"item" :
+	{
+		"sku" : "123456",
+		"location_id" : 2,
+		"level" : 5
+	}
+}
 ```
 
-## Example Batch Item Update
-Updating a multiple items stock would expect the POST to be something like (note array key is `items`):
+## Example Batch Items Stock Update
 
-```php
-'api_key'	=> API_KEY_FOR_USER,
-'items'		=> array(
-	0 => array(
-		'sku'			=> 123456,
-		'location_id'		=> 2,
-		'level'			=> 5
-	),
-	1 => array(
-		'id'			=> 126,
-		'location_id'		=> 2,
-		'level'			=> 5
-	)
-)
+URL: `DOMAIN/admin/stock/api/set_stock_batch.json`
+Content-Type: `application/json`
+Method: `POST`
+
+Example:
+
+```json
+{ 
+	"api_key" : "API_KEY_FOR_USER",
+	"items" :
+	[
+		{
+			"sku" : "123456",
+			"location_id" : 2,
+			"level" : 5
+		},
+		{
+			"id" : "654321",
+			"location_id" : 2,
+			"level" : 5
+		},
+	]
+}
 ```
